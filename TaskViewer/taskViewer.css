@@ -1,0 +1,38 @@
+
+#navigator {
+    float: left;
+    width: 100px;
+    background-color: #EFF3F5;
+}
+#navigator ul {
+    padding-left: 0px;
+    margin: 0px;
+}
+#navigator ul li {
+    list-style: none;
+    padding: 5px;
+    border-bottom: 1px solid #ccc;
+}
+.check.selected {
+    background-color: darkblue;
+    color: white;
+}
+
+
+div#form {
+    padding: 6px;
+}
+
+
+#content {
+    margin-left: 120px;
+}
+
+
+table {
+    width: 100%;
+}
+table td, table th {
+    padding: 3px 6px;
+    border: 1px solid #ccc;
+}
