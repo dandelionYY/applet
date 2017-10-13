@@ -1,5 +1,5 @@
-
-    
+    var tableBody = $("table#jobGrid>tbody");
+   
     var taskEvaluation = new Vue({
         el:'#taskEvaluation',
         data:{
