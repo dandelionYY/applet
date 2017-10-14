@@ -56,12 +56,12 @@
                     <th>任务标题，其他说明</th>
                 </tr>
                 </thead>
-                <!--<tbody v-for="taskList in taskLists">
-                    <tr class='title' data-url='" + taskFileUrl + "' data-task='" + taskIndex + "'>
-                        <td colspan='9'><a href='#'>==== " + title + " ====</a></td>
+                <tbody v-for="taskList in taskLists">
+                    <tr>
+                        <td colspan='9'>{{taskList.title}}</td>
                     </tr>
-                </tbody>-->
-                <tbody></tbody>
+                </tbody>
+                <!--<tbody></tbody>-->
             </table>
         </div>
     </div>
