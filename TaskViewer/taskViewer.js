@@ -3,30 +3,36 @@
     var taskEvaluation = new Vue({
         el:'#taskEvaluation',
         data:{
-            taskLists:[]
+            taskList:[]
             
         },
         methods:{
-            loadFolder: loadFolder,
+            loadFolder: function loadFolder() {
+                loadTaskList("./taskFile/");
+            }
         },
     });
 
 
-    function loadFolder() {
-        var tableBody = $("table#jobGrid>tbody");
-        loadTaskList("./Task/", tableBody);
-
-    }
-
 
     //1 显示任务项列表
-    var taskList = [];
-    function loadTaskList(folder, tableBody){
+    function loadTaskList(folder){
         $.get(folder, function(data) {
+            $(data).find("ul#files li a.icon-directory").each(function() {
+                var title = $(this).attr('title');
+                if(title == ".."){
+                    return;
+                }
+                var titleList = [];
+                titleList = title;
 
-            taskEvaluation.taskLists = $(data).find("ul#files li a.icon-directory");
-            //console.log(taskEvaluation.taskLists[1]);
-            
+                taskEvaluation.taskList = titleList;
+                console.log(taskEvaluation.taskList);
+
+
+            })
+
+
 
 
 
