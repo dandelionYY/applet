@@ -57,9 +57,9 @@
                 </tr>
                 </thead>
                 <tbody>
-                    <!--<tr>
-                        <td colspan='9'></td>
-                    </tr>-->
+                    <tr v-for="task in taskList">
+                        <td colspan='9'>{{task.title}}</td>
+                    </tr>
                 </tbody>
                 <!--<tbody></tbody>-->
             </table>
