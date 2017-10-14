@@ -35,16 +35,17 @@
 
                 var taskFileUrl = folder + title + "/readme.md";
                 taskList.push(taskFileUrl);
-                var taskIndex = "task-" + (taskList.length - 1);
+
                 $.get(taskFileUrl, function(data) {
                     //console.log(data);
-                    var jobTitleRow = $("<tr class='title' data-url='" + taskFileUrl + "' data-task='" + taskIndex + "'></tr>").appendTo(tableBody);
-                    jobTitleRow.append("<td colspan='9'><a href='#'> " + title + " </a></td>");
+                    var titleRow = $("<tr class='title' data-url='" + taskFileUrl + "'></tr>").appendTo(tableBody);
+                    titleRow.append("<td colspan='9'>" + title + " </td>");
 
                     var start = data.indexOf("[BEGIN JOBS TABLE]");
                     var stop = data.indexOf("[END JOBS TABLE]");
-                    var lines = data.substring(start, stop).split("\n");
-                    loadTaskJobs(taskIndex, lines, jobTitleRow);
+                    var lines = data.slice(start, stop).split("\n");
+
+                    loadTaskJobs(titleRow,lines);
                 });
 
 
@@ -54,14 +55,17 @@
     }
 
     //2 遍历文件夹下的所有任务项
-    function loadTaskJobs(taskIndex, lines, jobTitleRow){
+    function loadTaskJobs(titleRow,lines){
         $.each(lines, function() {
             var line = this.trim();
+            if(line.length == 0 || line.indexOf("编号") >=0 || line.indexOf("|---") >=0 ){
+                return true;
+            }
 
             var tableBody = $("table#jobGrid>tbody");
             var row = $("<tr class='data'></tr>").appendTo(tableBody);
             $.each(line.split("|"), function(index) {
-                if (index == 0 || index == 11){
+                if(index == 9){
                     return true;
                 }
                 $("<td>" + this + "</td>").appendTo(row);
