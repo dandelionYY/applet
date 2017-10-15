@@ -40,7 +40,15 @@
         </div>
         <div id="content">
             <div id="form">
-                <input type="button" id="filter" value="按条件筛选" @click="loadFolder" />
+                <input type="button" id="filter" value="按条件筛选" @click="seach" />
+                状态:
+                <span class="check selected"><input type="checkbox" checked name=status value="草稿" />草稿</span>
+                <span class="check selected"><input type="checkbox" checked name=status value="待分配" />待分配</span>
+                <span class="check selected"><input type="checkbox" checked name=status value="进行中" />进行中</span>
+                <span class="check selected"><input type="checkbox" checked name=status value="已延迟" />已延迟</span>
+                <span class="check"><input type="checkbox" name=status value="按时完成" />按时完成</span>
+                <span class="check"><input type="checkbox" name=status value="延迟完成" />延迟完成</span>
+                <span class="check"><input type="checkbox" name=status value="撤销" />撤销</span>
             </div>
             <table id="jobGrid">
                 <thead>
@@ -56,19 +64,25 @@
                     <th>任务标题，其他说明</th>
                 </tr>
                 </thead>
-                <tbody>
-                    <tr v-for="task in taskList">
-                        <td colspan='9'>{{task.title}}</td>
+                <tbody v-for="task in taskList">
+                    <tr>
+                        <td colspan="9">{{task.title}}</td>
+                    </tr>
+                    <tr v-for="job in task.jobList">
+                        <td>{{job.status}}</td>
+                        <td>{{job.number}}</td>
+                        <td>{{job.assigner}}</td>
+                        <td>{{job.person}}</td>
+                        <td>{{job.time}}</td>
+                        <td>{{job.actualDate}}</td>
+                        <td>{{job.planDate}}</td>
+                        <td>{{job.delayDate}}</td>
+                        <td>{{job.detailed}}</td>
                     </tr>
                 </tbody>
-                <!--<tbody></tbody>-->
             </table>
         </div>
     </div>
-
-
-
-
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
