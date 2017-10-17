@@ -13,17 +13,16 @@ var taskApp = new Vue({
             loadTaskList("./taskFile/");
         },
         seach:function seachFolder() {
-            
             for(var task in this.taskList){
-                for(var job in this.taskList[task].jobList){
-                    var status = this.taskList[task].jobList[job].status;
-                    seachByStatus(status,this.condition.statusList);
+                for(var jobIndex in this.taskList[task].jobList){
+                    var job = this.taskList[task].jobList[jobIndex];
+                    seachByStatus(job);
                 }
             }
         }
     },
     computed:{
-        jobItem:seachByStatus
+
     }
 });
 
@@ -98,7 +97,8 @@ function loadTaskJobs(lines) {
                     break;
             }
         })
-        job.status = setStatus(job.time, job.person, job.planDate, job.actualDate, job.delayDate);
+        job.status = setStatus(job);
+        job.jobItem = true;
 
         fileTaskList.push(job);
     })
@@ -106,26 +106,26 @@ function loadTaskJobs(lines) {
 }
 
 //3 状态信息
-function setStatus(time, person, planDate, actualDate, delayDate) {
-    if(delayDate.trim() == "cancel"){
+function setStatus(job) {
+    if(job.delayDate.trim() == "cancel"){
         return "撤销";
     }
-    if(time <= 0){
+    if(job.time <= 0){
         return "草稿";
     }else{
-        if(person == "" || planDate == null) {
+        if(job.person == "" || job.planDate == null) {
             return "待分配";
         }
         var today = new Date();
-        if(actualDate){
-            if(actualDate <= planDate){
+        if(job.actualDate){
+            if(job.actualDate <= job.planDate){
                 return "按时完成";
             }else{
                 return "延迟完成";
             }
         }
         else {
-            if(today <= planDate){
+            if(today <= job.planDate){
                 return "进行中";
             }else{
                 return "已延迟";
@@ -135,9 +135,10 @@ function setStatus(time, person, planDate, actualDate, delayDate) {
 }
 
 //4 根据状态查找
-function seachByStatus(status,checked) {
-    if ($.inArray(status, taskApp.condition.statusList) == -1) {
-        return false;
+function seachByStatus(job) {
+    if ($.inArray(job.status, taskApp.condition.statusList) == -1) {
+        job.jobItem = false;
+        return ;
     }
     return true;
 }
