@@ -13,7 +13,8 @@
     padding: 5px;
     border-bottom: 1px solid #ccc;
 }
-.check.selected {
+
+.selected {
     background-color: darkblue;
     color: white;
 }

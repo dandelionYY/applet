@@ -40,15 +40,16 @@
         </div>
         <div id="content">
             <div id="form">
-                <input type="button" id="filter" value="按条件筛选" @click="seach" />
+                <input type="button" id="filter" value="加载" @click="load" />
                 状态:
-                <span class="check selected"><input type="checkbox" checked name=status value="草稿" />草稿</span>
-                <span class="check selected"><input type="checkbox" checked name=status value="待分配" />待分配</span>
-                <span class="check selected"><input type="checkbox" checked name=status value="进行中" />进行中</span>
-                <span class="check selected"><input type="checkbox" checked name=status value="已延迟" />已延迟</span>
-                <span class="check"><input type="checkbox" name=status value="按时完成" />按时完成</span>
-                <span class="check"><input type="checkbox" name=status value="延迟完成" />延迟完成</span>
-                <span class="check"><input type="checkbox" name=status value="撤销" />撤销</span>
+                <span><input type="checkbox" name=status value="草稿" v-model="condition.statusList"/>草稿</span>
+                <span><input type="checkbox" name=status value="待分配" v-model="condition.statusList"/>待分配</span>
+                <span><input type="checkbox" name=status value="进行中" v-model="condition.statusList"/>进行中</span>
+                <span><input type="checkbox" name=status value="已延迟" v-model="condition.statusList"/>已延迟</span>
+                <span><input type="checkbox" name=status value="按时完成" v-model="condition.statusList"/>按时完成</span>
+                <span><input type="checkbox" name=status value="延迟完成" v-model="condition.statusList"/>延迟完成</span>
+                <span><input type="checkbox" name=status value="撤销" v-model="condition.statusList"/>撤销</span>
+                <input type="button" id="sesach" value="按条件筛选" @click="seach" />
             </div>
             <table id="jobGrid">
                 <thead>
@@ -68,7 +69,7 @@
                     <tr>
                         <td colspan="9">{{task.title}}</td>
                     </tr>
-                    <tr v-for="job in task.jobList">
+                    <tr v-for="job in task.jobList" v-show="jobItem">
                         <td>{{job.status}}</td>
                         <td>{{job.number}}</td>
                         <td>{{job.assigner}}</td>

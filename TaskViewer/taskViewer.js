@@ -2,14 +2,29 @@
 var taskApp = new Vue({
     el:'#taskEvaluation',
     data:{
-        taskList:[]
-    },
-    methods:{
-        seach:function loadFolder() {
-            loadTaskList("./taskFile/");
+        taskList:[],
+        condition:{
+            statusList:["草稿","待分配","进行中","已延迟"]
         },
 
     },
+    methods:{
+        load:function loadFolder() {
+            loadTaskList("./taskFile/");
+        },
+        seach:function seachFolder() {
+            
+            for(var task in this.taskList){
+                for(var job in this.taskList[task].jobList){
+                    var status = this.taskList[task].jobList[job].status;
+                    seachByStatus(status,this.condition.statusList);
+                }
+            }
+        }
+    },
+    computed:{
+        jobItem:seachByStatus
+    }
 });
 
 //1 显示任务列表
@@ -34,18 +49,15 @@ function loadTaskList(folder){
                 var start = data.indexOf("[BEGIN JOBS TABLE]");
                 var stop = data.indexOf("[END JOBS TABLE]");
                 var lines = data.slice(start, stop).split("\n");
-
-                var fileTaskList = [];
-                loadTaskJobs(lines,fileTaskList);
-                task.jobList = fileTaskList;
+                task.jobList = loadTaskJobs(lines);
             })
-
         })
     })
 }
 
 //2 遍历文件夹下的所有任务项
-function loadTaskJobs(lines,fileTaskList) {
+function loadTaskJobs(lines) {
+    var fileTaskList = [];
     $.each(lines,function (index,value) {
         var line = this.trim();
         if(line.indexOf("[BEGIN JOBS TABLE]") >=0
@@ -53,64 +65,48 @@ function loadTaskJobs(lines,fileTaskList) {
             ||line.indexOf("[END JOBS TABLE]") >=0){
             return;
         }
-        var number = "";
-        var assigner = "";
-        var person = "";
-        var time = "";
-        var actualDate = "";
-        var planDate = "";
-        var delayDate = "";
-        var detailed ="";
+
+        var job = {};
         $.each(line.split("|"),function (index,value) {
             if(index == 0 || index == 9){
                 return;
             }
             switch (index) {
                 case 1:
-                    number = this.trim();
+                    job.number = this.trim();
                     break;
                 case 2:
-                    assigner = this.trim();
+                    job.assigner = this.trim();
                     break;
                 case 3:
-                    person = this.trim();
+                    job.person = this.trim();
                     break;
                 case 4:
-                    time = parseFloat(this.trim());
+                    job.time = parseFloat(this.trim());
                     break;
                 case 5:
-                    actualDate = this.trim();
+                    job.actualDate = this.trim();
                     break;
                 case 6:
-                    planDate = this.trim();
+                    job.planDate = this.trim();
                     break;
                 case 7:
-                    delayDate = this.trim();
+                    job.delayDate = this.trim();
                     break;
                 case 8:
-                    detailed = this.trim();
+                    job.detailed = this.trim();
                     break;
             }
         })
-        var status =getStatus(time, person, planDate, actualDate, delayDate);
+        job.status = setStatus(job.time, job.person, job.planDate, job.actualDate, job.delayDate);
 
-        var job = {
-            status:status,
-            number:number,
-            assigner:assigner,
-            person:person,
-            time:time,
-            actualDate:actualDate,
-            planDate:planDate,
-            delayDate:delayDate,
-            detailed:detailed
-        }
         fileTaskList.push(job);
     })
+    return fileTaskList;
 }
 
-//3 得到状态信息
-function getStatus(time, person, planDate, actualDate, delayDate) {
+//3 状态信息
+function setStatus(time, person, planDate, actualDate, delayDate) {
     if(delayDate.trim() == "cancel"){
         return "撤销";
     }
@@ -136,8 +132,29 @@ function getStatus(time, person, planDate, actualDate, delayDate) {
             }
         }
     }
-    return "";
 }
+
+//4 根据状态查找
+function seachByStatus(status,checked) {
+    if ($.inArray(status, taskApp.condition.statusList) == -1) {
+        return false;
+    }
+    return true;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
