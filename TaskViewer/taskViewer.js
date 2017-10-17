@@ -4,7 +4,10 @@ var taskApp = new Vue({
     data:{
         taskList:[],
         condition:{
-            statusList:["草稿","待分配","进行中","已延迟"]
+            statusList:["草稿","待分配","进行中","已延迟"],
+            personList:["所有人"],
+            fromDate:"",
+            toDate:""
         },
 
     },
@@ -13,17 +16,15 @@ var taskApp = new Vue({
             loadTaskList("./taskFile/");
         },
         seach:function seachFolder() {
-            for(var task in this.taskList){
-                for(var jobIndex in this.taskList[task].jobList){
-                    var job = this.taskList[task].jobList[jobIndex];
-                    seachByStatus(job);
+            for(var taskIndex in this.taskList){
+                for(var jobIndex in this.taskList[taskIndex].jobList){
+                    var job = this.taskList[taskIndex].jobList[jobIndex];
+                    seachByCondition(job);
                 }
             }
         }
     },
-    computed:{
 
-    }
 });
 
 //1 显示任务列表
@@ -38,7 +39,7 @@ function loadTaskList(folder){
 
             var task = {
                 title:title,
-                jobList:[]
+                jobList:[],
             }
             titleList.push(task);
             taskApp.taskList = titleList;
@@ -98,7 +99,7 @@ function loadTaskJobs(lines) {
             }
         })
         job.status = setStatus(job);
-        job.jobItem = true;
+        job.jobItemShow = true;
 
         fileTaskList.push(job);
     })
@@ -134,51 +135,29 @@ function setStatus(job) {
     }
 }
 
-//4 根据状态查找
-function seachByStatus(job) {
-    if ($.inArray(job.status, taskApp.condition.statusList) == -1) {
-        job.jobItem = false;
-        return ;
+//4 根据条件筛选
+function seachByCondition(job) {
+    
+    //4-1 状态筛选
+    if($.inArray(job.status, taskApp.condition.statusList) == -1) {
+        job.jobItemShow = false;
+        return;
     }
+    //4-2 人员筛选
+    if ($.inArray("所有人", taskApp.condition.personList) == -1) {
+        if($.inArray(job.assigner || job.person, taskApp.condition.personList) == -1){
+            job.jobItemShow = false;
+            return;
+        }
+    }
+    //4-3 时间筛选
+    if((job.actualDate < taskApp.condition.fromDate || job.actualDate > taskApp.condition.toDate) && job.actualDate != null ){
+        job.jobItemShow = false;
+        return;
+    }
+
     return true;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -12,35 +12,36 @@
     <div id="taskEvaluation">
         <div id="navigator">
             <ul>
-                <li class="check selected"><input type="checkbox" checked name=person value="所有人" />所有人</li>
-                <li class="check"><input type="checkbox" name=person value="杨无鬼" />杨无鬼</li>
-                <li class="check"><input type="checkbox" name=person value="黄楷仁" />黄楷仁</li>
-                <li class="check"><input type="checkbox" name=person value="陈小刚" />陈小刚</li>
-                <li class="check"><input type="checkbox" name=person value="吴浪" />吴浪</li>
-                <li class="check"><input type="checkbox" name=person value="李发健" />李发健</li>
-                <li class="check"><input type="checkbox" name=person value="黄锦洋" />黄锦洋</li>
-                <li class="check"><input type="checkbox" name=person value="林建鹏" />林建鹏</li>
-                <li class="check"><input type="checkbox" name=person value="李罗平" />李罗平</li>
-                <li class="check"><input type="checkbox" name=person value="姚仕" />姚仕</li>
-                <li class="check"><input type="checkbox" name=person value="沈瀚" />沈瀚</li>
-                <li class="check"><input type="checkbox" name=person value="李桂滋" />李桂滋</li>
-                <li class="check"><input type="checkbox" name=person value="梁高鹏" />梁高鹏</li>
-                <li class="check"><input type="checkbox" name=person value="周海丰" />周海丰</li>
-                <li class="check"><input type="checkbox" name=person value="高智成" />高智成</li>
-                <li class="check"><input type="checkbox" name=person value="马恒" />马恒</li>
-                <li class="check"><input type="checkbox" name=person value="曾厚儒" />曾厚儒</li>
-                <li class="check"><input type="checkbox" name=person value="邱俊金" />邱俊金</li>
-                <li class="check"><input type="checkbox" name=person value="丁鸿" />丁鸿</li>
-                <li class="check"><input type="checkbox" name=person value="赵灿领" />赵灿领</li>
-                <li class="check"><input type="checkbox" name=person value="常建杰" />常建杰</li>
-                <li class="check"><input type="checkbox" name=person value="杜嘉林" />杜嘉林</li>
-                <li class="check"><input type="checkbox" name=person value="冯燕萍" />冯燕萍</li>
-                <li class="check"><input type="checkbox" name=person value="杨雅丽" />杨雅丽</li>
+                <li><input type="checkbox" name=person value="所有人" v-model="condition.personList"/>所有人</li>
+                <li><input type="checkbox" name=person value="杨无鬼" v-model="condition.personList"/>杨无鬼</li>
+                <li><input type="checkbox" name=person value="黄楷仁" v-model="condition.personList"/>黄楷仁</li>
+                <li><input type="checkbox" name=person value="吴浪" v-model="condition.personList"/>吴浪</li>
+                <li><input type="checkbox" name=person value="李发健" v-model="condition.personList"/>李发健</li>
+                <li><input type="checkbox" name=person value="黄锦洋" v-model="condition.personList"/>黄锦洋</li>
+                <li><input type="checkbox" name=person value="林建鹏" v-model="condition.personList"/>林建鹏</li>
+                <li><input type="checkbox" name=person value="李罗平" v-model="condition.personList"/>李罗平</li>
+                <li><input type="checkbox" name=person value="姚仕" v-model="condition.personList"/>姚仕</li>
+                <li><input type="checkbox" name=person value="沈瀚" v-model="condition.personList"/>沈瀚</li>
+                <li><input type="checkbox" name=person value="李桂滋" v-model="condition.personList"/>李桂滋</li>
+                <li><input type="checkbox" name=person value="梁高鹏" v-model="condition.personList"/>梁高鹏</li>
+                <li><input type="checkbox" name=person value="周海丰" v-model="condition.personList"/>周海丰</li>
+                <li><input type="checkbox" name=person value="高智成" v-model="condition.personList"/>高智成</li>
+                <li><input type="checkbox" name=person value="马恒" v-model="condition.personList"/>马恒</li>
+                <li><input type="checkbox" name=person value="曾厚儒" v-model="condition.personList"/>曾厚儒</li>
+                <li><input type="checkbox" name=person value="邱俊金" v-model="condition.personList"/>邱俊金</li>
+                <li><input type="checkbox" name=person value="丁鸿" v-model="condition.personList"/>丁鸿</li>
+                <li><input type="checkbox" name=person value="赵灿领" v-model="condition.personList"/>赵灿领</li>
+                <li><input type="checkbox" name=person value="常建杰" v-model="condition.personList"/>常建杰</li>
+                <li><input type="checkbox" name=person value="杜嘉林" v-model="condition.personList"/>杜嘉林</li>
+                <li><input type="checkbox" name=person value="冯燕萍" v-model="condition.personList"/>冯燕萍</li>
+                <li><input type="checkbox" name=person value="杨雅丽" v-model="condition.personList"/>杨雅丽</li>
             </ul>
         </div>
         <div id="content">
             <div id="form">
                 <input type="button" id="filter" value="加载" @click="load" />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
                 状态:
                 <span><input type="checkbox" name=status value="草稿" v-model="condition.statusList"/>草稿</span>
                 <span><input type="checkbox" name=status value="待分配" v-model="condition.statusList"/>待分配</span>
@@ -49,6 +50,13 @@
                 <span><input type="checkbox" name=status value="按时完成" v-model="condition.statusList"/>按时完成</span>
                 <span><input type="checkbox" name=status value="延迟完成" v-model="condition.statusList"/>延迟完成</span>
                 <span><input type="checkbox" name=status value="撤销" v-model="condition.statusList"/>撤销</span>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                时间：
+                从<input type=date name=fromDate v-model="condition.fromDate"/>
+                到<input type=date name=toDate v-model="condition.toDate"/>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
                 <input type="button" id="sesach" value="按条件筛选" @click="seach" />
             </div>
             <table id="jobGrid">
@@ -69,7 +77,7 @@
                     <tr>
                         <td colspan="9">{{task.title}}</td>
                     </tr>
-                    <tr v-for="job in task.jobList" v-show="job.jobItem">
+                    <tr v-for="job in task.jobList" v-show="job.jobItemShow">
                         <td>{{job.status}}</td>
                         <td>{{job.number}}</td>
                         <td>{{job.assigner}}</td>
