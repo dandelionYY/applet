@@ -14,9 +14,6 @@ var taskApp = new Vue({
 
     },
     methods:{
-        load:function loadFolder() {
-            loadTaskList("./taskFile/");
-        },
         seach:function seachFolder() {
             for(var taskIndex in this.taskList){
                 for(var jobIndex in this.taskList[taskIndex].jobList){
@@ -24,7 +21,6 @@ var taskApp = new Vue({
                     seachByCondition(job);
                 }
             }
-            
         }
     },
 
@@ -86,7 +82,7 @@ function loadTaskJobs(lines) {
                     job.person = this.trim();
                     break;
                 case 4:
-                    job.time = parseFloat(this.trim());
+                    job.time = this.trim();
                     break;
                 case 5:
                     job.actualDate = this.trim();
@@ -109,6 +105,7 @@ function loadTaskJobs(lines) {
         job.jobItemShow = true;
 
         fileTaskList.push(job);
+        seachByCondition(job);
     })
     return fileTaskList;
 }
@@ -133,7 +130,7 @@ function setStatus(job) {
             }
         }
         else {
-            if(today <= job.planDate){
+            if(formatDate(today) <= job.planDate){
                 return "进行中";
             }else{
                 return "已延迟";
@@ -181,8 +178,7 @@ function seachByCondition(job) {
         }
     }
 
-    return true;
-
+    return job.jobItemShow = true;
 }
 
 //日期格式化函数
@@ -198,4 +194,4 @@ function formatDate(dateStr){
     return year +'-'+ month +'-'+ date;
 }
 
-
+loadTaskList("./taskFile/");
