@@ -6,8 +6,10 @@ var taskApp = new Vue({
         condition:{
             statusList:["草稿","待分配","进行中","已延迟"],
             personList:["所有人"],
+            selectTime:[],
             fromDate:"",
-            toDate:""
+            toDate:"",
+            selectRole:[]
         },
 
     },
@@ -22,6 +24,7 @@ var taskApp = new Vue({
                     seachByCondition(job);
                 }
             }
+            
         }
     },
 
@@ -40,6 +43,7 @@ function loadTaskList(folder){
             var task = {
                 title:title,
                 jobList:[],
+                taskShow:true
             }
             titleList.push(task);
             taskApp.taskList = titleList;
@@ -86,12 +90,15 @@ function loadTaskJobs(lines) {
                     break;
                 case 5:
                     job.actualDate = this.trim();
+                    formatDate(job.actualDate);
                     break;
                 case 6:
                     job.planDate = this.trim();
+                    formatDate(job.planDate);
                     break;
                 case 7:
                     job.delayDate = this.trim();
+                    formatDate(job.delayDate);
                     break;
                 case 8:
                     job.detailed = this.trim();
@@ -137,27 +144,58 @@ function setStatus(job) {
 
 //4 根据条件筛选
 function seachByCondition(job) {
-    
+
     //4-1 状态筛选
     if($.inArray(job.status, taskApp.condition.statusList) == -1) {
         job.jobItemShow = false;
         return;
     }
+
     //4-2 人员筛选
     if ($.inArray("所有人", taskApp.condition.personList) == -1) {
-        if($.inArray(job.assigner || job.person, taskApp.condition.personList) == -1){
+        if(taskApp.condition.selectRole == "分派人"){
+            if($.inArray(job.assigner,taskApp.condition.personList) == -1){
+                job.jobItemShow = false;
+                return;
+            }
+        }
+        if(taskApp.condition.selectRole == "责任人"){
+            if($.inArray(job.person,taskApp.condition.personList) == -1){
+                job.jobItemShow = false;
+                return;
+            }
+        }
+    }
+
+    //4-3 时间筛选
+    if(taskApp.condition.selectTime == "计划完成时间"){
+        if((job.planDate < taskApp.condition.fromDate || job.planDate > taskApp.condition.toDate) && job.actualDate != null ){
             job.jobItemShow = false;
             return;
         }
     }
-    //4-3 时间筛选
-    if((job.actualDate < taskApp.condition.fromDate || job.actualDate > taskApp.condition.toDate) && job.actualDate != null ){
-        job.jobItemShow = false;
-        return;
+    if(taskApp.condition.selectTime == "实际完成时间"){
+        if((job.actualDate < taskApp.condition.fromDate || job.actualDate > taskApp.condition.toDate) && job.actualDate != null ){
+            job.jobItemShow = false;
+            return;
+        }
     }
 
     return true;
+
 }
 
+//日期格式化函数
+function formatDate(dateStr){
+    if (!dateStr) {
+        return ''
+    }
+    var dateObj=new Date(dateStr);
+    var year=dateObj.getFullYear();
+    var month=dateObj.getMonth()+1<10 ? '0'+(dateObj.getMonth()+1) : dateObj.getMonth()+1;
+    var date=dateObj.getDate()<10 ? '0'+dateObj.getDate() : dateObj.getDate();
+
+    return year +'-'+ month +'-'+ date;
+}
 
 

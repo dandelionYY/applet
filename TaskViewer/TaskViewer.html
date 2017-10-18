@@ -53,11 +53,23 @@
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
                 时间：
+                <select name="selectTime" v-model="condition.selectTime" >
+                    <option>实际完成时间</option>
+                    <option>计划完成时间</option>
+                </select>
                 从<input type=date name=fromDate v-model="condition.fromDate"/>
                 到<input type=date name=toDate v-model="condition.toDate"/>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
+                人员角色：
+                <select name="selectRole" v-model="condition.selectRole" >
+                    <option>分派人</option>
+                    <option>责任人</option>
+                </select>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
                 <input type="button" id="sesach" value="按条件筛选" @click="seach" />
+
             </div>
             <table id="jobGrid">
                 <thead>
@@ -74,7 +86,7 @@
                 </tr>
                 </thead>
                 <tbody v-for="task in taskList">
-                    <tr>
+                    <tr v-show="task.taskShow">
                         <td colspan="9">{{task.title}}</td>
                     </tr>
                     <tr v-for="job in task.jobList" v-show="job.jobItemShow">
