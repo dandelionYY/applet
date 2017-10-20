@@ -218,7 +218,7 @@ function seachByCondition(job) {
         }
     }
 
-    return job.jobItemShow = true;
+    job.jobItemShow = true;
 }
 
 //5 初始化统计数据
@@ -261,13 +261,12 @@ function calculate(job) {
     }
 
     taskApp.allTimeJobs[propertyJobs]++;
-    taskApp.statistics[job.person][propertyJobs]++;
+    taskApp.statistics[$.inArray(job.person, taskApp.allPersons)][propertyJobs]++;
 
     taskApp.allTimeJobs[propertyTime] += job.time;
-    taskApp.statistics[job.person][propertyTime] += job.time;
+    taskApp.statistics[$.inArray(job.person, taskApp.allPersons)][propertyTime] += job.time;
 
 }
-
 
 
 initiStatisticsData();
