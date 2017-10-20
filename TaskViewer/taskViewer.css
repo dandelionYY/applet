@@ -37,3 +37,27 @@ table td, table th {
     padding: 3px 6px;
     border: 1px solid #ccc;
 }
+
+
+/*状态颜色*/
+.draft {
+    background-color: burlywood;
+}
+.todo {
+    background-color: #ccc;
+}
+.doing {
+    background-color: goldenrod;
+}
+.doneInTime {
+    background-color: aquamarine;
+}
+.doneDelay {
+    background-color: aqua;
+}
+.delay {
+    background-color: yellow;
+}
+.cancel {
+    background-color: darkgray;
+}

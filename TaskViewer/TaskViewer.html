@@ -63,14 +63,36 @@
 
                 人员角色：
                 <select name="selectRole" v-model="condition.selectRole" >
-                    <option>分派人</option>
                     <option>责任人</option>
+                    <option>分派人</option>
                 </select>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-
             </div>
-            <table id="jobGrid">
+
+            <table id="summaryTable">
+                <tr>
+                    <th>汇总（h/项）</th>
+                    <th v-for="person in allPersons">{{person}}</th>
+                </tr>
+                <tr>
+                    <th>进行中{{allTimeJobs.doingTime}}({{allTimeJobs.doingJobs}})</th>
+                    <td v-for="timeJobs in statistics">{{timeJobs.doingTime}}({{timeJobs.doingJobs}})</td>
+                </tr>
+                <tr>
+                    <th>延迟中{{allTimeJobs.doingDelayTime}}({{allTimeJobs.doingDelayJobs}})</th>
+                    <td v-for="timeJobs in statistics">{{timeJobs.doingDelayTime}}({{timeJobs.doingDelayJobs}})</td>
+                </tr>
+                <tr>
+                    <th>已完成{{allTimeJobs.doneTime}}({{allTimeJobs.doneJobs}})</th>
+                    <td v-for="timeJobs in statistics">{{timeJobs.doneTime}}({{timeJobs.doneJobs}})</td>
+                </tr>
+                <tr>
+                    <th>延迟完成{{allTimeJobs.doneDelayTime}}({{allTimeJobs.doneDelayJobs}})</th>
+                    <td v-for="timeJobs in statistics">{{timeJobs.doneDelayTime}}({{timeJobs.doneDelayJobs}})</td>
+                </tr>
+            </table>
+
+            <table>
                 <thead>
                 <tr>
                     <th>状态</th>
@@ -85,10 +107,10 @@
                 </tr>
                 </thead>
                 <tbody v-for="task in taskList">
-                    <tr v-show="task.taskShow">
-                        <td colspan="9">{{task.title}}</td>
+                    <tr v-show="task.taskNumber">
+                        <td colspan="9">===={{task.title}}====【{{task.taskNumber}}】</td>
                     </tr>
-                    <tr v-for="job in task.jobList" v-show="job.jobItemShow">
+                    <tr v-for="job in task.jobList" v-show="job.jobItemShow" :class="statusClass[job.status]">
                         <td>{{job.status}}</td>
                         <td>{{job.number}}</td>
                         <td>{{job.assigner}}</td>
