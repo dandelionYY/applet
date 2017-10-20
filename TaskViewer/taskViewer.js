@@ -232,7 +232,8 @@ function initiStatisticsData(){
 //6 计算
 function calculate(job) {
 
-    if($.inArray(job.person, taskApp.allPersons) == -1){
+    var index = $.inArray(job.person, taskApp.allPersons);
+    if(index == -1){
         return;
     }
 
@@ -261,10 +262,10 @@ function calculate(job) {
     }
 
     taskApp.allTimeJobs[propertyJobs]++;
-    taskApp.statistics[$.inArray(job.person, taskApp.allPersons)][propertyJobs]++;
+    taskApp.statistics[index][propertyJobs]++;
 
     taskApp.allTimeJobs[propertyTime] += job.time;
-    taskApp.statistics[$.inArray(job.person, taskApp.allPersons)][propertyTime] += job.time;
+    taskApp.statistics[index][propertyTime] += job.time;
 
 }
 
