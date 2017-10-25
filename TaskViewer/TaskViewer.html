@@ -10,25 +10,25 @@
 <body>
     <div id="taskApp">
         <div id="navigator">
-            <ul class="status" @click="selectStatus">
-                <li><label class="selected"><input type="checkbox" value="所有人" v-model="condition.personList">所有人</label></li>
-                <li><label><input type="checkbox" value="沈瀚" v-model="condition.personList">沈瀚</label></li>
-                <li><label><input type="checkbox" value="李发健" v-model="condition.personList">李发健</label></li>
-                <li><label><input type="checkbox" value="曾厚儒" v-model="condition.personList">曾厚儒</label></li>
-                <li><label><input type="checkbox" value="高智成" v-model="condition.personList">高智成</label></li>
-                <li><label><input type="checkbox" value="李罗平" v-model="condition.personList">李罗平</label></li>
-                <li><label><input type="checkbox" value="常建杰" v-model="condition.personList">常建杰</label></li>
-                <li><label><input type="checkbox" value="黄锦洋" v-model="condition.personList">黄锦洋</label></li>
-                <li><label><input type="checkbox" value="马恒" v-model="condition.personList">马恒</label></li>
-                <li><label><input type="checkbox" value="李桂滋" v-model="condition.personList">李桂滋</label></li>
-                <li><label><input type="checkbox" value="姚仕" v-model="condition.personList">姚仕</label></li>
-                <li><label><input type="checkbox" value="冯燕萍" v-model="condition.personList">冯燕萍</label></li>
-                <li><label><input type="checkbox" value="吴浪" v-model="condition.personList">吴浪</label></li>
-                <li><label><input type="checkbox" value="梁高鹏" v-model="condition.personList">梁高鹏</label></li>
-                <li><label><input type="checkbox" value="周海丰" v-model="condition.personList">周海丰</label></li>
-                <li><label><input type="checkbox" value="林建鹏" v-model="condition.personList">林建鹏</label></li>
-                <li><label><input type="checkbox" value="杜嘉林" v-model="condition.personList">杜嘉林</label></li>
-                <li><label><input type="checkbox" value="杨雅丽" v-model="condition.personList">杨雅丽</label></li>
+            <ul>
+                <li><label :class="{selected:IsSelectPerson('所有人')}"><input type="checkbox" value="所有人" v-model="condition.personList">所有人</label></li>
+                <li><label :class="{selected:IsSelectPerson('沈瀚')}"><input type="checkbox" value="沈瀚" v-model="condition.personList">沈瀚</label></li>
+                <li><label :class="{selected:IsSelectPerson('李发健')}"><input type="checkbox" value="李发健" v-model="condition.personList">李发健</label></li>
+                <li><label :class="{selected:IsSelectPerson('曾厚儒')}"><input type="checkbox" value="曾厚儒" v-model="condition.personList">曾厚儒</label></li>
+                <li><label :class="{selected:IsSelectPerson('高智成')}"><input type="checkbox" value="高智成" v-model="condition.personList">高智成</label></li>
+                <li><label :class="{selected:IsSelectPerson('李罗平')}"><input type="checkbox" value="李罗平" v-model="condition.personList">李罗平</label></li>
+                <li><label :class="{selected:IsSelectPerson('常建杰')}"><input type="checkbox" value="常建杰" v-model="condition.personList">常建杰</label></li>
+                <li><label :class="{selected:IsSelectPerson('黄锦洋')}"><input type="checkbox" value="黄锦洋" v-model="condition.personList">黄锦洋</label></li>
+                <li><label :class="{selected:IsSelectPerson('马恒')}"><input type="checkbox" value="马恒" v-model="condition.personList">马恒</label></li>
+                <li><label :class="{selected:IsSelectPerson('李桂滋')}"><input type="checkbox" value="李桂滋" v-model="condition.personList">李桂滋</label></li>
+                <li><label :class="{selected:IsSelectPerson('姚仕')}"><input type="checkbox" value="姚仕" v-model="condition.personList">姚仕</label></li>
+                <li><label :class="{selected:IsSelectPerson('冯燕萍')}"><input type="checkbox" value="冯燕萍" v-model="condition.personList">冯燕萍</label></li>
+                <li><label :class="{selected:IsSelectPerson('吴浪')}"><input type="checkbox" value="吴浪" v-model="condition.personList">吴浪</label></li>
+                <li><label :class="{selected:IsSelectPerson('梁高鹏')}"><input type="checkbox" value="梁高鹏" v-model="condition.personList">梁高鹏</label></li>
+                <li><label :class="{selected:IsSelectPerson('周海丰')}"><input type="checkbox" value="周海丰" v-model="condition.personList">周海丰</label></li>
+                <li><label :class="{selected:IsSelectPerson('林建鹏')}"><input type="checkbox" value="林建鹏" v-model="condition.personList">林建鹏</label></li>
+                <li><label :class="{selected:IsSelectPerson('杜嘉林')}"><input type="checkbox" value="杜嘉林" v-model="condition.personList">杜嘉林</label></li>
+                <li><label :class="{selected:IsSelectPerson('杨雅丽')}"><input type="checkbox" value="杨雅丽" v-model="condition.personList">杨雅丽</label></li>
             </ul>
         </div>
 
@@ -50,15 +50,13 @@
                     <option value="分派人">分派人</option>
                 </select>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <span class="status" @click="selectStatus">
-                <label class="selected"><input type="checkbox" value="草稿" v-model="condition.statusList" checked="checked">草稿</label>
-                <label class="selected"><input type="checkbox" value="待分配" v-model="condition.statusList">待分配</label>
-                <label class="selected"><input type="checkbox" value="进行中" v-model="condition.statusList">进行中</label>
-                <label class="selected"><input type="checkbox" value="已延迟" v-model="condition.statusList">已延迟</label>
-                <label><input type="checkbox" value="按时完成" v-model="condition.statusList">按时完成</label>
-                <label><input type="checkbox" value="延迟完成" v-model="condition.statusList">延迟完成</label>
-                <label><input type="checkbox" value="撤销" v-model="condition.statusList">撤销</label>
-                </span>
+                <label :class="{selected:IsSelectStatus('草稿')}"><input type="checkbox" value="草稿" v-model="condition.statusList">草稿</label>
+                <label :class="{selected:IsSelectStatus('待分配')}"><input type="checkbox" value="待分配" v-model="condition.statusList">待分配</label>
+                <label :class="{selected:IsSelectStatus('进行中')}"><input type="checkbox" value="进行中" v-model="condition.statusList">进行中</label>
+                <label :class="{selected:IsSelectStatus('已延迟')}"><input type="checkbox" value="已延迟" v-model="condition.statusList">已延迟</label>
+                <label :class="{selected:IsSelectStatus('按时完成')}"><input type="checkbox" value="按时完成" v-model="condition.statusList">按时完成</label>
+                <label :class="{selected:IsSelectStatus('延迟完成')}"><input type="checkbox" value="延迟完成" v-model="condition.statusList">延迟完成</label>
+                <label :class="{selected:IsSelectStatus('撤销')}"><input type="checkbox" value="撤销" v-model="condition.statusList">撤销</label>
             </div>
 
             <table>

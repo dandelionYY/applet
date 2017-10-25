@@ -33,7 +33,8 @@ var taskApp = new Vue({
         filter:filters,
         displayTimeJobs:displayTimeJobs,
         showdown:showdowns,
-        selectStatus:selectStatus
+        IsSelectStatus:IsSelectStatus,
+        IsSelectPerson:IsSelectPerson
     }
 })
 
@@ -60,14 +61,12 @@ function displayTimeJobs(time,job) {
     return s;
 }
 
-function selectStatus() {
-    $(".status").on("click", "input[type=checkbox]", function() {
-        if ($(this).prop("checked")) {
-            $(this).parent().addClass("selected");
-        } else {
-            $(this).parent().removeClass("selected");
-        }
-    });
+function IsSelectStatus(status) {
+    return $.inArray(status,this.condition.statusList) != -1;
+}
+
+function IsSelectPerson(person) {
+    return $.inArray(person,this.condition.personList) != -1;
 }
 
 function loadTaskList(folder) {
@@ -298,3 +297,4 @@ function showdowns() {
 
 InitiAddUpData();
 loadTaskList("./Task");
+loadTaskList("./TaskDone");
