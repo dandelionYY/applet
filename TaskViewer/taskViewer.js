@@ -71,7 +71,6 @@ function IsSelectPerson(person) {
 
 function loadTaskList(folder) {
     $.get(folder,function (data) {
-        var titleList = [];
         $(data).find("ul#files li a.icon-directory").each(function () {
             var title = $(this).attr("title");
             if(title == "..") return;
@@ -81,8 +80,7 @@ function loadTaskList(folder) {
                 jobList:[],
                 number:0
             }
-            titleList.push(task);
-            taskApp.taskList = titleList;
+            taskApp.taskList.push(task);
 
             var fileUrl = folder + "/" + title + "/readme.md";
             $.get(fileUrl,function (data) {
@@ -91,7 +89,6 @@ function loadTaskList(folder) {
                 var rows = data.substring(start,end).split("\n");
                 task.jobList =  readJobList(rows);
             })
-
         })
     })
 }
@@ -217,7 +214,6 @@ function filterByCondition(job) {
 }
 
 function addUp(job) {
-
     index = $.inArray(job.person,taskApp.allPerson);
     if(index == -1){
         return;
