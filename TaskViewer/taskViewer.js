@@ -87,8 +87,6 @@ function loadTaskList(folder) {
 
             var fileUrl = folder + "/" + title + "/readme.md";
             $.get(fileUrl,function (data) {
-                //var start = data.indexOf("[BEGIN]");
-                //var end = data.indexOf("[END]");
 				var start = data.indexOf("[BEGIN JOBS TABLE]");
                 var end = data.indexOf("[END JOBS TABLE]");
                 var rows = data.substring(start,end).split("\n");
