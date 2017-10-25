@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>taskViewer</title>
+
+    <link rel="stylesheet" href="taskViewer.css">
+
+</head>
+<body>
+    <div id="taskApp">
+        <div id="navigator">
+            <ul class="status" @click="selectStatus">
+                <li><label class="selected"><input type="checkbox" value="所有人" v-model="condition.personList">所有人</label></li>
+                <li><label><input type="checkbox" value="沈瀚" v-model="condition.personList">沈瀚</label></li>
+                <li><label><input type="checkbox" value="李发健" v-model="condition.personList">李发健</label></li>
+                <li><label><input type="checkbox" value="曾厚儒" v-model="condition.personList">曾厚儒</label></li>
+                <li><label><input type="checkbox" value="高智成" v-model="condition.personList">高智成</label></li>
+                <li><label><input type="checkbox" value="李罗平" v-model="condition.personList">李罗平</label></li>
+                <li><label><input type="checkbox" value="常建杰" v-model="condition.personList">常建杰</label></li>
+                <li><label><input type="checkbox" value="黄锦洋" v-model="condition.personList">黄锦洋</label></li>
+                <li><label><input type="checkbox" value="马恒" v-model="condition.personList">马恒</label></li>
+                <li><label><input type="checkbox" value="李桂滋" v-model="condition.personList">李桂滋</label></li>
+                <li><label><input type="checkbox" value="姚仕" v-model="condition.personList">姚仕</label></li>
+                <li><label><input type="checkbox" value="冯燕萍" v-model="condition.personList">冯燕萍</label></li>
+                <li><label><input type="checkbox" value="吴浪" v-model="condition.personList">吴浪</label></li>
+                <li><label><input type="checkbox" value="梁高鹏" v-model="condition.personList">梁高鹏</label></li>
+                <li><label><input type="checkbox" value="周海丰" v-model="condition.personList">周海丰</label></li>
+                <li><label><input type="checkbox" value="林建鹏" v-model="condition.personList">林建鹏</label></li>
+                <li><label><input type="checkbox" value="杜嘉林" v-model="condition.personList">杜嘉林</label></li>
+                <li><label><input type="checkbox" value="杨雅丽" v-model="condition.personList">杨雅丽</label></li>
+            </ul>
+        </div>
+
+        <div id="content">
+            <div id="filter">
+                <input type="button" value="按条件筛选" @click="filter" />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                日期选择：
+                <select name="selectDate" v-model="condition.selectDate">
+                    <option value="实际完成时间">实际完成时间</option>
+                    <option value="计划完成时间">计划完成时间</option>
+                </select>
+                从<input type="date" name="startDate" v-model="condition.startDate" />
+                到<input type="date" name="endDate" v-model="condition.endDate" />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                人员角色：
+                <select name="selectPerson" v-model="condition.selectPerson">
+                    <option value="责任人">责任人</option>
+                    <option value="分派人">分派人</option>
+                </select>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <span class="status" @click="selectStatus">
+                <label class="selected"><input type="checkbox" value="草稿" v-model="condition.statusList" checked="checked">草稿</label>
+                <label class="selected"><input type="checkbox" value="待分配" v-model="condition.statusList">待分配</label>
+                <label class="selected"><input type="checkbox" value="进行中" v-model="condition.statusList">进行中</label>
+                <label class="selected"><input type="checkbox" value="已延迟" v-model="condition.statusList">已延迟</label>
+                <label><input type="checkbox" value="按时完成" v-model="condition.statusList">按时完成</label>
+                <label><input type="checkbox" value="延迟完成" v-model="condition.statusList">延迟完成</label>
+                <label><input type="checkbox" value="撤销" v-model="condition.statusList">撤销</label>
+                </span>
+            </div>
+
+            <table>
+                <tr>
+                    <th>汇总（h/项）</th>
+                    <th v-for="person in allPerson">{{person}}</th>
+                </tr>
+                <tr>
+                    <th>进行中{{ displayTimeJobs( allTimeJobs.doingTime, allTimeJobs.doingJobs ) }}</th>
+                    <td v-for="timeJobs in statistics">{{displayTimeJobs(timeJobs.doingTime,timeJobs.doingJobs)}}</td>
+                </tr>
+                <tr>
+                    <th>延迟中 {{ displayTimeJobs( allTimeJobs.doingDelayTime, allTimeJobs.doingDelayJobs ) }}</th>
+                    <td v-for="timeJobs in statistics"> {{displayTimeJobs(timeJobs.doingDelayTime,timeJobs.doingDelayJobs)}} </td>
+                </tr>
+                <tr>
+                    <th>已完成 {{ displayTimeJobs( allTimeJobs.doneTime, allTimeJobs.doneJobs ) }} </th>
+                    <td v-for="timeJobs in statistics"> {{displayTimeJobs(timeJobs.doneTime,timeJobs.doneJobs)}} </td>
+                </tr>
+                <tr>
+                    <th>延迟完成 {{ displayTimeJobs( allTimeJobs.doneDelayTime, allTimeJobs.doneDelayJobs ) }} </th>
+                    <td v-for="timeJobs in statistics"> {{displayTimeJobs(timeJobs.doneDelayTime,timeJobs.doneDelayJobs)}}</td>
+                </tr>
+            </table>
+
+            <table id="taskTable">
+                <thead>
+                <tr>
+                    <th>状态</th>
+                    <th>编号</th>
+                    <th>分派人</th>
+                    <th>责任人</th>
+                    <th>小时</th>
+                    <th>实际完成</th>
+                    <th>计划完成</th>
+                    <th>延迟计划</th>
+                    <th>任务标题，其他说明</th>
+                </tr>
+                </thead>
+                <tbody v-for="task in taskList">
+                <tr v-show="task.number" v-bind:data-url=" './taskFile/' + task.title +  '/readme.md' ">
+                    <td colspan="9"><a href="#" @click="showdown">==={{task.title}}===【{{task.number}}】</a></td>
+                </tr>
+                <tr v-for="job in task.jobList" v-show="job.show" :class="statusClass[job.status]">
+                    <td>{{job.status}}</td>
+                    <td>{{job.number}}</td>
+                    <td>{{job.assigner}}</td>
+                    <td>{{job.person}}</td>
+                    <td>{{job.time}}</td>
+                    <td>{{job.actualDate}}</td>
+                    <td>{{job.planDate}}</td>
+                    <td>{{job.delayDate}}</td>
+                    <td :class="{important:job.IsImportant}">{{job.detailed}}</td >
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.7.1/showdown.min.js"></script>
+    <script src="//code.jboxcdn.com/0.4.8/jBox.min.js"></script>
+    <link href="//code.jboxcdn.com/0.4.8/jBox.css" rel="stylesheet">
+    <script src="taskViewer.js"></script>
+</body>
+</html>
