@@ -1,0 +1,280 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <style type="text/css">
+	    #panel{
+		    text-align:center;
+	    }
+	    #panel table{
+		    margin:10px auto;
+	    }
+	    td{
+		    width: 20px;
+		    height: 20px;
+		    vertical-align: middle;
+		    text-align: center;
+	    }
+	    .around{
+		    border-width:0px;
+	    }
+	    .start{
+		    background-color: #C0C0C0;
+		    border: thin gray outset;
+	    }
+	    .bomb{
+		    background-color:red;
+		    border:1px gray ridge;
+	    }
+	    .discovery{
+		    background-color: #CCFFFF;
+		    border: 1px solid gray;
+	    }
+</style>
+
+    <script type="text/javascript">
+        function createPanelByHtmlText(panel, rows, cols)
+        {
+            var tableHtml = "<table id='mineTable'>";
+            for (var i = 0; i < rows + 2; i++)
+            {
+                tableHtml += "<tr>";
+                for (var j = 0; j < cols + 2; j++)
+                {
+                    var idValue = "cell_" + i + "_" + j;
+                    if (i == 0 || j == 0 || i == rows + 1 || j == cols + 1)
+                    {
+                        tableHtml += "<td class='around' id='" + idValue + "'></td>"
+                    }
+                    else
+                    {
+                        tableHtml += "<td class='start' onclick='var e = window.event || arguments[0];cell_click(e);' id='" + idValue + "'></td>"
+                    }
+                }
+                tableHtml += "</tr>"
+            }
+            tableHtml += "</table>";
+            panel.innerHTML = tableHtml;
+        }
+
+        function createPanelByHtmlDom(panel, rows, cols)
+        {
+            var oTable = document.createElement("table");
+            oTable.setAttribute("id", "mineTable");
+            for (var i = 0; i < rows + 2; i++)
+            {
+                oTable.insertRow(i);
+                for (var j = 0; j < cols + 2; j++)
+                {
+                    oTable.rows[i].insertCell(j);
+                    oTable.rows[i].cells[j].setAttribute("id", "cell_" + i + "_" + j);
+                    if (i == 0 || j == 0 || i == rows + 1 || j == cols + 1)
+                    {
+                        oTable.rows[i].cells[j].setAttribute("class", "around");
+                    }
+                    else
+                    {
+                        oTable.rows[i].cells[j].setAttribute("class", "start");
+                        oTable.rows[i].cells[j].onclick = cell_click;
+                    }
+                }
+            }
+            panel.appendChild(oTable);
+        }
+
+        function createPanelByDom(panel, rows, cols)
+        {
+            var oTable = document.createElement("table");
+            oTable.setAttribute("id", "mineTable");
+            var oTbody = document.createElement("tbody");
+            
+            for (i = 0; i < rows + 2; i++) {
+                var oRow = document.createElement("tr");
+
+                for (j = 0; j < cols + 2; j++) {
+                    var oCell = document.createElement("td");
+                    oCell.setAttribute("id","cell_"+ i + "_" + j );
+                    if( i == 0 || j == 0 || i == rows + 1 || j == cols + 1)
+                    {
+                        oCell.setAttribute("class","around");
+                    }
+                    else
+                    {
+                        oCell.setAttribute("class", "start");
+                        oCell.onclick = cell_click;
+                    }
+                    oRow.appendChild(oCell);
+
+                }
+                oTbody.appendChild(oRow);
+
+            } //end for
+            oTable.appendChild(oTbody);
+
+            panel.appendChild(oTable);
+        }
+
+        function randomRange(min, max)
+        {
+            return min + Math.floor(Math.random() * (max - min + 1));
+        }
+
+        function getCell(row, col)
+        {
+            return document.getElementById("cell_" + row + "_" + col);
+        }
+        
+        function bulei(rows,cols,mines)
+        {
+            var i = 0, j = 0, k = 0;
+            do
+            {
+                i = randomRange(1, rows);
+                j = randomRange(1, cols);
+                if (getCell(i, j).tag && getCell(i, j).tag == "*") continue;
+                getCell(i, j).tag = "*";
+                getCell(i, j).title = "*"; // 用于调试
+                k++;
+            } while (k < mines);
+
+            for ( i = 0; i < rows + 2; i++)
+            {
+                for ( j = 0; j < cols + 2; j++)
+                {
+                    if (getCell(i, j).tag && getCell(i, j).tag == "*") continue;
+                    if (i == 0 || j == 0 || i == rows + 1 || j == cols + 1)
+                    {
+                        getCell(i, j).tag = "";
+                        getCell(i, j).title = ""; // 用于调试
+                        continue;
+                    }
+                    getCell(i, j).tag = roundNumber(i, j);
+                    getCell(i, j).title = roundNumber(i, j); // 用于调试
+                }
+            }
+        }
+        
+        function roundNumber(row, col)
+        {
+            var n = 0;
+            if (getCell(row - 1, col - 1).tag == "*") n += 1;
+            if (getCell(row - 1, col).tag     == "*") n += 1;
+            if (getCell(row - 1, col + 1).tag == "*") n += 1;
+            if (getCell(row, col - 1).tag     == "*") n += 1;
+            if (getCell(row, col + 1).tag     == "*") n += 1;
+            if (getCell(row + 1, col - 1).tag == "*") n += 1;
+            if (getCell(row + 1, col).tag     == "*") n += 1;
+            if (getCell(row + 1, col + 1).tag == "*") n += 1;
+            return (n==0 ? "" : n.toString()) ;
+        }
+
+    </script>
+
+    <script type="text/javascript">
+        var rowCount = 10;
+        var colCount = 10;
+        var mineNumber = 10;
+        var gameIsOver = false;
+        var discoveryCounter = 0; // 已经排除的方格数
+        
+        function paichu(row, col)
+        {
+            if ( gameIsOver || row == 0 || row == rowCount + 1 || col == 0 || col == colCount + 1)
+                return;
+
+            var oCell = getCell(row, col);
+            oCell.setAttribute("class", "discovery");
+            discoveryCounter++;
+            
+            if (oCell.tag != "")
+                oCell.innerHTML = oCell.tag;
+            else
+            {
+                if (getCell(row - 1, col - 1).getAttribute("class") != 'discovery') paichu(row - 1, col - 1);
+                if (getCell(row - 1, col).getAttribute("class")     != 'discovery') paichu(row - 1, col);
+                if (getCell(row - 1, col + 1).getAttribute("class") != 'discovery') paichu(row - 1, col + 1);
+                if (getCell(row, col - 1).getAttribute("class")     != 'discovery') paichu(row, col - 1);
+                if (getCell(row, col + 1).getAttribute("class")     != 'discovery') paichu(row, col + 1);
+                if (getCell(row + 1, col - 1).getAttribute("class") != 'discovery') paichu(row + 1, col - 1);
+                if (getCell(row + 1, col).getAttribute("class")     != 'discovery') paichu(row + 1, col);
+                if (getCell(row + 1, col + 1).getAttribute("class") != 'discovery') paichu(row + 1, col + 1);
+            }
+        }
+
+        function cell_click(eventObj)
+        {
+            if (gameIsOver) return;
+            
+            eventObj = window.event || eventObj;
+            var oCell = eventObj.target || eventObj.srcElement;
+
+            if (oCell.tag == "*")
+            {
+                oCell.setAttribute("class", "bomb");
+                alert(" ***** 爆炸 ***** ");
+                gameIsOver = true;
+                return;
+            }
+            
+            if (oCell.getAttribute("class") != 'discovery')
+            {
+                var col = oCell.cellIndex;
+                var row = oCell.parentNode.rowIndex;
+                paichu(row, col);
+                if (discoveryCounter == rowCount * colCount - mineNumber)
+                {
+                    alert("已经成功排除所有地雷，按确定键继续...");
+                    gameIsOver = true;
+                    return;
+                }
+            }
+        }
+            
+        function startGame(rows, cols, mines)
+        {
+            var panel = document.getElementById("panel");
+            var oTable = document.getElementById("mineTable");
+            if (oTable)
+            {
+                panel.removeChild(oTable);
+            }
+            //createPanelByHtmlText(panel, rows, cols, mines);
+            createPanelByDom(panel, rows, cols, mines);
+            bulei(rows, cols, mines);
+            
+            colCount = cols;
+            rowCount = rows;
+            mineNumber = mines;
+            gameIsOver = false;
+            discoveryCounter = 0; // 已经排除的方格数
+        }
+
+        window.onload = function()
+        {
+            document.getElementById("startGame").onclick = function()
+            {
+                var rows = parseInt( document.forms[0]["rows"].value );
+                var cols = parseInt( document.forms[0]["cols"].value );
+                var mines = parseInt( document.forms[0]["mines"].value );
+                startGame(rows, cols, mines);
+            }
+            document.forms[0]["rows"].value = "10";
+            document.forms[0]["cols"].value = "10";
+            document.forms[0]["mines"].value = "10";
+            startGame(10, 10, 10);
+        }
+    </script>
+
+</head>
+<body>
+    <div id="panel">
+	    <form method="post">
+		    行数：<input name="rows" type="text" style="width: 64px" />
+		    列数：<input name="cols" type="text" style="width: 64px" />
+		    雷数：<input name="mines" type="text" style="width: 64px" />
+		    <input id="startGame" name="startGame" type="button" value="重新开始游戏" />
+	    </form>
+    </div>
+</body>
+</html>

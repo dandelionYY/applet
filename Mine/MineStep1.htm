@@ -1,0 +1,182 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <style type="text/css">
+	    div.alignCenter{
+		    text-align:center;
+	    }
+	    #panel{
+		    margin:10px auto;
+	    }
+	    td{
+		    width: 20px;
+		    height: 20px;
+		    vertical-align: middle;
+		    text-align: center;
+	    }
+	    .around{
+		    border-width:0px;
+	    }
+	    .start{
+		    background-color: #C0C0C0;
+		    border: thin gray outset;
+	    }
+	    .bomb{
+		    background-color:red;
+		    border:1px gray ridge;
+	    }
+	    .discovery{
+		    background-color: #CCFFFF;
+		    border: 1px solid gray;
+	    }
+</style>
+
+    <script type="text/javascript">
+        function createPanelByHtmlText(panel, rows, cols)
+        {
+            var tableHtml = "<table>";
+            for (var i = 0; i < rows + 2; i++)
+            {
+                tableHtml += "<tr>";
+                for (var j = 0; j < cols + 2; j++)
+                {
+                    var idValue = "cell_" + i + "_" + j;
+                    if (i == 0 || j == 0 || i == rows + 1 || j == cols + 1)
+                    {
+                        tableHtml += "<td class='around' id='" + idValue + "'></td>"
+                    }
+                    else
+                    {
+                        tableHtml += "<td class='start' id='" + idValue + "'></td>"
+                    }
+                }
+                tableHtml += "</tr>"
+            }
+            tableHtml += "</table>";
+            panel.innerHTML = tableHtml;
+        }
+
+        function createPanelByHtmlDom(panel, rows, cols)
+        {
+            var oTable = document.createElement("table");
+            for (var i = 0; i < rows + 2; i++)
+            {
+                oTable.insertRow(i);
+                for (var j = 0; j < cols + 2; j++)
+                {
+                    oTable.rows[i].insertCell(j);
+                    oTable.rows[i].cells[j].setAttribute("id", "cell_" + i + "_" + j);
+                    if (i == 0 || j == 0 || i == rows + 1 || j == cols + 1)
+                    {
+                        oTable.rows[i].cells[j].setAttribute("class", "around");
+                    }
+                    else
+                    {
+                        oTable.rows[i].cells[j].setAttribute("class", "start");
+                    }
+                }
+            }
+            panel.appendChild(oTable);
+        }
+
+        function createPanelByDom(panel, rows, cols)
+        {
+            var oTable = document.createElement("table");
+            var oTbody = document.createElement("tbody");
+            
+            for (i = 0; i < rows + 2; i++) {
+                var oRow = document.createElement("tr");
+
+                for (j = 0; j < cols + 2; j++) {
+                    var oCell = document.createElement("td");
+                    oCell.setAttribute("id","cell_"+ i + "_" + j );
+                    if( i == 0 || j == 0 || i == rows + 1 || j == cols + 1)
+                    {
+                        oCell.setAttribute("class","around");
+                    }
+                    else
+                    {
+                        oCell.setAttribute("class","start");
+                    }
+                    oRow.appendChild(oCell);
+
+                }
+                oTbody.appendChild(oRow);
+
+            } //end for
+            oTable.appendChild(oTbody);
+
+            panel.appendChild(oTable);
+        }
+
+        function randomRange(min, max)
+        {
+            return min + Math.floor(Math.random() * (max - min + 1));
+        }
+
+        function getCell(row, col)
+        {
+            return document.getElementById("cell_" + row + "_" + col);
+        }
+        
+        function bulei(rows,cols,mines)
+        {
+            var i = 0, j = 0, k = 0;
+            do
+            {
+                i = randomRange(1, rows);
+                j = randomRange(1, cols);
+                if (getCell(i, j).tag && getCell(i, j).tag == "*") continue;
+                getCell(i, j).tag = "*";
+                getCell(i, j).title = "*"; // 用于调试
+                k++;
+            } while (k < mines);
+
+            for ( i = 0; i < rows + 2; i++)
+            {
+                for ( j = 0; j < cols + 2; j++)
+                {
+                    if (getCell(i, j).tag && getCell(i, j).tag == "*") continue;
+                    if (i == 0 || j == 0 || i == rows + 1 || j == cols + 1)
+                    {
+                        getCell(i, j).tag = "0";
+                        getCell(i, j).title = "0"; // 用于调试
+                        continue;
+                    }
+                    getCell(i, j).tag = roundNumber(i, j).toString();
+                    getCell(i, j).title = roundNumber(i, j).toString(); // 用于调试
+                }
+            }
+        }
+        
+        function roundNumber(row, col)
+        {
+            var n = 0;
+            if (getCell(row - 1, col - 1).tag == "*") n += 1;
+            if (getCell(row - 1, col).tag     == "*") n += 1;
+            if (getCell(row - 1, col + 1).tag == "*") n += 1;
+            if (getCell(row, col - 1).tag     == "*") n += 1;
+            if (getCell(row, col + 1).tag     == "*") n += 1;
+            if (getCell(row + 1, col - 1).tag == "*") n += 1;
+            if (getCell(row + 1, col).tag     == "*") n += 1;
+            if (getCell(row + 1, col + 1).tag == "*") n += 1;
+            return n;
+        }
+
+    </script>
+</head>
+<body>
+    <div id="panel"></div>
+
+    <script type="text/javascript">
+        //createPanelByHtmlText(document.getElementById("panel"), 9, 9, 9);
+        //createPanelByDom(document.getElementById("panel"), 9, 9, 9);
+        createPanelByHtmlDom(document.getElementById("panel"), 9, 9, 9);
+        bulei(9, 9, 10);
+        
+    </script>
+    
+</body>
+</html>
