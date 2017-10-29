@@ -12,11 +12,10 @@ var mineApp = new Vue({
     methods:{
         start: function(){
             this.bulei(this.rows, this.cols, this.mines);
+            this.isGameOver = false;
         },
-        startGameAgain:function (rows,cols,mines) {
-            this.bulei(rows, cols, mines);
-        },
-        initiPanel: function(rows,cols){
+        initPanel: function(rows,cols){
+            this.table = [];
             for( var row=0; row<rows+2; row++){
                 this.table.push([]);
                 for( var col=0; col<cols+2; col++){
@@ -32,7 +31,7 @@ var mineApp = new Vue({
             }
         },
         bulei: function(rows, cols, mines){
-            this.initiPanel(rows,cols);
+            this.initPanel(rows,cols);
             var i=0, j=0, k=0;
             do
             {
@@ -75,25 +74,41 @@ var mineApp = new Vue({
             if (this.table[row][col-1].text == "*")     n+=1;
             return n == 0 ? "" : n.toString();
         },
-        open:function (row, cell) {
-
-            cell.isOpen = true;
-            cell.isWord = true;
+        open:function (row, col) {
+            if ( row == 0 || row == this.rows+1 || col == 0 || col == this.cols+1 ){
+                return;
+            }
+            this.table[row][col].isOpen = true;
+            this.table[row][col].isWord = true;
             this.findCells ++;
-            
+
+            if(this.table[row][col].text == ""){
+                if (this.table[row-1][col-1].isOpen == false)  this.open(row-1, col-1);
+                if (this.table[row-1][col].isOpen == false)    this.open(row-1, col);
+                if (this.table[row-1][col+1].isOpen == false)  this.open(row-1, col+1);
+                if (this.table[row][col+1].isOpen == false)    this.open(row, col+1);
+                if (this.table[row+1][col+1].isOpen == false)  this.open(row+1, col+1);
+                if (this.table[row+1][col].isOpen == false)    this.open(row+1, col);
+                if (this.table[row+1][col-1].isOpen == false)  this.open(row+1, col-1);
+                if (this.table[row][col-1].isOpen == false)    this.open(row, col-1);
+            }
+
         },
-        click:function (row,cell) {
+        click:function (row,col) {
             if(this.isGameOver) return;
-            if(cell.text == "*"){
-                cell.isBomb = true;
+
+            if(this.table[row][col].text == "*"){
+                this.table[row][col].isBomb = true;
                 alert(" ***** 爆炸 ***** ");
                 this.isGameOver = true;
+                return;
             }
-            if(cell.isOpen == false){
-                this.open(row,cell);
+            if(this.table[row][col].isOpen == false){
+                this.open(row,col);
                 if (this.findCells == this.rows * this.cols - this.mines){
                     alert("*****恭喜找到所有地雷*****");
                     this.isGameOver = true;
+                    return;
                 }
             }
         },
