@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>mine</title>
+    <link rel="stylesheet" href="mine.css">
+</head>
+<body>
+    <div id="panel">
+
+        行数：<input name="rows" type="text" v-model="rows" />
+        列数：<input name="cols" type="text" v-model="cols" />
+        雷数：<input name="mines" type="text" v-model="mines" />
+        <input id="startGameAgain" name="startGame" type="button" value="重新开始游戏" @click="startGameAgain(rows,cols,mines)" />
+
+        <table>
+            <tbody>
+                <tr v-for="row in table">
+                    <td v-for="cell in row" :class="{start:cell.isShow, open:cell.isOpen, word:cell.isWord, bomb:cell.isBomb}" @click="click(row,cell)" >{{cell.text}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="mine.js"></script>
+</body>
+</html>

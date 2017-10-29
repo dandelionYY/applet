@@ -1,0 +1,42 @@
+*{margin: 0 auto}
+
+#panel{
+    text-align:center;
+    margin-top: 20px;
+}
+#panel table{
+    margin:10px auto;
+}
+
+td{
+    width: 30px;
+    height: 30px;
+    vertical-align: middle;
+    text-align: center;
+    color: #C0C0C0;
+    /*color: black;*/
+}
+
+.start{
+    background-color: #C0C0C0;
+    border: 1px solid gray;
+}
+.open{
+    background-color: #CCFFFF;
+    border: 1px solid gray;
+}
+.word{
+    color: black;
+}
+.bomb{
+    background-color:red;
+    border:1px gray ridge;
+}
+
+
+input{
+    width: 65px;
+}
+input#startGameAgain{
+    width: 100px;
+}
