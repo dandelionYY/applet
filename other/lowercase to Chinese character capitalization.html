@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JS Bin</title>
+</head>
+<body>
+
+<script>
+    function to(n){
+        var a = ['亿','万','仟','佰','拾','元'],
+                b = ['元','拾','佰','仟','万','亿'],
+                s = ['零','壹','贰','叁','肆','伍','陆','柒','捌','玖'];
+
+        var i=(n+'').length-1;
+        return (n+'').replace(/\d/g, function(m, k){
+            return s[m]+b[i--];
+        });
+    }
+    console.log(to(123125));
+</script>
+
+</body>
+</html>
